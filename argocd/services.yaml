@@ -29,6 +29,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/tonychg/kubedev.git
+          targetRevision: master
           ref: service
         - repoURL: https://github.com/tonychg/kubedev.git
           path: charts/argocd-service
