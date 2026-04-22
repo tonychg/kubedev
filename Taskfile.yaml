@@ -93,6 +93,8 @@ tasks:
   install:
     deps:
       - install-controllers
+    cmds:
+      - kubectl apply -f argocd/argocd.yaml
   status:
     cmds:
       - kubectl version
