@@ -8,7 +8,7 @@ spec:
   goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
-        repoURL: git@github.com:tonychg/kubedev.git
+        repoURL: https://github.com/tonychg/kubedev.git
         revision: master
         directories:
           - path: services/*/service.yaml
@@ -28,11 +28,11 @@ spec:
         namespace: argocd
       project: default
       sources:
-        - repoURL: git@github.com:tonychg/kubedev.git
+        - repoURL: https://github.com/tonychg/kubedev.git
           targetRevision: master
           path: "services/{{.serviceName}}"
           ref: service
-        - repoURL: git@github.com:tonychg/kubedev.git
+        - repoURL: https://github.com/tonychg/kubedev.git
           path: charts/argocd-service
           targetRevision: master
           helm:
