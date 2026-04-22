@@ -1,0 +1,16 @@
+destination:
+  name: in-cluster
+  namespace: cert-manager
+helm:
+  repoURL: oci://quay.io/jetstack/charts/cert-manager
+  targetRevision: v1.20.2
+  chart: .
+syncPolicy:
+  automated:
+    enabled: true
+    prune: false
+    selfHeal: false
+  syncOptions:
+    - CreateNamespace=true
+    - PruneLast=true
+    - ServerSideApply=true
