@@ -1,12 +1,11 @@
-serviceName: cilium
 manifests: true
 destination:
   name: in-cluster
-  namespace: ingress-haproxy
+  namespace: haproxy-controller
 helm:
-  repoURL: https://helm.cilium.io
-  targetRevision: 1.19.1
-  chart: cilium
+  repoURL: https://haproxytech.github.io/helm-charts
+  targetRevision: 1.44.0
+  chart: kubernetes-ingress
 syncPolicy:
   automated:
     enabled: true
