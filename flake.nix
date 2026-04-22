@@ -24,6 +24,7 @@
           cilium-cli
           traceroute
           go-task
+          argocd
         ];
       };
     });
