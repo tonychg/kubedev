@@ -10,6 +10,7 @@ spec:
     - git:
         repoURL: https://github.com/tonychg/kubedev.git
         revision: master
+        requeueAfterSeconds: 15
         files:
           - path: "services/*/service.yaml"
         values:
