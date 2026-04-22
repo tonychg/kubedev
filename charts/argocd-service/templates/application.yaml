@@ -36,11 +36,11 @@ spec:
         releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
         ignoreMissingValueFiles: true
         valueFiles:
-          - $app/{{$servicePath}}values.yaml
+          - $app/{{$servicePath}}/values.yaml
     {{- end }}
     {{- if .Values.manifests }}
     - repoURL: {{.Values.repoURL}}
-      path: $app/manifests
+      path: $app/{{$servicePath}}/manifests
       directory:
         recurse: true
     {{- end }}
