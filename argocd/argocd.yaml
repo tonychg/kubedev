@@ -20,6 +20,7 @@ spec:
         valueFiles:
           - $app/services/argocd/values.yaml
     - repoURL: https://github.com/tonychg/kubedev.git
-      path: argocd/services.yaml
+      path: argocd
       directory:
+        include: services.yaml
         recurse: false
