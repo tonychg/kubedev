@@ -1,4 +1,3 @@
-manifests: true
 destination:
   name: in-cluster
   namespace: haproxy-controller
