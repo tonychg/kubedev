@@ -1,0 +1,49 @@
+{{ $servicePath := printf "%s/%s" .Values.servicesPath .Values.serviceName }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  {{- if .Values.serviceName }}
+  name: {{.Values.serviceName}}
+  {{- else }}
+  {{- printf "serviceName must be defined" | fail }}
+  {{- end }}
+spec:
+  project: {{.Values.project}}
+  {{- with .Values.destination }}
+  destination:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  sources:
+    - repoURL: {{.Values.repoURL}}
+      path: {{$servicePath}}
+      ref: app
+    {{- if .Values.helm }}
+    - {{ if .Values.helm.repoURL -}}
+      repoURL: {{ .Values.helm.repoURL }}
+      {{- else }}
+      {{- printf "helm.repoURL must be defined" | fail }}
+      {{- end }}
+      {{- if .Values.helm.chart }}
+      chart: {{ .Values.helm.chart }}
+      {{- else }}
+      {{- printf "helm.chart must be defined" | fail }}
+      {{- end }}
+      {{- if .Values.helm.targetRevision }}
+      targetRevision: {{ .Values.helm.targetRevision }}
+      {{- else }}
+      {{- printf "helm.targetRevision must be defined" | fail }}
+      {{- end }}
+      helm:
+        releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
+        valueFiles:
+          - $app/values.yaml
+    {{- end }}
+    {{- if .Values.manifests }}
+    - repoURL: {{.Values.repoURL}}
+      path: $app/manifests
+      directory:
+        recurse: true
+    {{- end }}
+    {{- with .Values.sources }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}

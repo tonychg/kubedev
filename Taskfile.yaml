@@ -45,8 +45,7 @@ tasks:
           releaseName: cilium
   install-cilium-lb:
     cmds:
-      - kubectl apply -f services/cilium/ciliuml2announcementpolicy.yaml
-      - kubectl apply -f services/cilium/ciliumloadbalancerippool.yaml
+      - kubectl apply -f services/cilium/manifests
   install-argocd:
     cmds:
       - task: _helm-upgrade
