@@ -2,13 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: argocd
+  namespace: argocd
 spec:
   project: default
   destination:
     name: in-cluster
     namespace: argocd
   sources:
-    - repoURL: https://argoproj.github.io/argo-helm
+    - repoURL: https://github.com/tonychg/kubedev.git
       targetRevision: master
       ref: app
     - repoURL: https://argoproj.github.io/argo-helm
@@ -18,7 +19,7 @@ spec:
         skipCrds: false
         valueFiles:
           - $app/services/argocd/values.yaml
-    - repoURL: https://argoproj.github.io/argo-helm
+    - repoURL: https://github.com/tonychg/kubedev.git
       path: argocd/services.yaml
       directory:
         recurse: false

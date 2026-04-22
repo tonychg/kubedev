@@ -11,4 +11,5 @@ helm: {}
 # repoURL: ""
 # chart: ""
 # releaseName: ""
+# skipCrds: false
 syncPolicy: {}
