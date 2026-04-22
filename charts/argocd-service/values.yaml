@@ -3,7 +3,7 @@ repoURL: https://github.com/tonychg/kubedev.git
 revision: master
 project: default
 destination: {}
-servicesPath: ./services
+servicesPath: services
 manifests: false
 sources: []
 helm: {}
