@@ -1,9 +1,14 @@
 serviceName: ""
 repoURL: git@github.com:tonychg/kubedev.git
 revision: master
-destination:
-  name: in-cluster
+project: default
+destination: {}
 servicesPath: ./services
 manifests: false
 sources: []
 helm: {}
+# targetRevision: ""
+# repoURL: ""
+# chart: ""
+# releaseName: ""
+syncPolicy: {}
