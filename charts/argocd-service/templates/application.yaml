@@ -35,6 +35,7 @@ spec:
       helm:
         releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
         ignoreMissingValueFiles: true
+        skipCrds: {{ .Values.helm.skipCrds | default true }}
         valueFiles:
           - $app/{{$servicePath}}/values.yaml
     {{- end }}
