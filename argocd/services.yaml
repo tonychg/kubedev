@@ -21,7 +21,7 @@ spec:
     preserveResourcesOnDeletion: false
   template:
     metadata:
-      name: "{{.values.serviceName}}"
+      name: "service-{{.values.serviceName}}"
     spec:
       destination:
         name: in-cluster
