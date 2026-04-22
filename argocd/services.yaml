@@ -10,8 +10,8 @@ spec:
     - git:
         repoURL: https://github.com/tonychg/kubedev.git
         revision: master
-        directories:
-          - path: services/*/service.yaml
+        files:
+          - path: services/**/service.yaml
         values:
           serviceName: '{{.path.basename}}'
   syncPolicy:
