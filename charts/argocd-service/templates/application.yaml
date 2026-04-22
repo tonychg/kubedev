@@ -15,7 +15,6 @@ spec:
   {{- end }}
   sources:
     - repoURL: {{ .Values.repoURL }}
-      path: {{ $servicePath }}
       ref: app
     {{- if .Values.helm }}
     - {{ if .Values.helm.repoURL -}}
@@ -37,7 +36,7 @@ spec:
         releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
         ignoreMissingValueFiles: true
         valueFiles:
-          - $app/values.yaml
+          - $app/{{$servicePath}}values.yaml
     {{- end }}
     {{- if .Values.manifests }}
     - repoURL: {{.Values.repoURL}}
