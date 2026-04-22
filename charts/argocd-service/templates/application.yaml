@@ -40,7 +40,7 @@ spec:
     {{- end }}
     {{- if .Values.manifests }}
     - repoURL: {{.Values.repoURL}}
-      path: $app/{{$servicePath}}/manifests
+      path: {{$servicePath}}/manifests
       directory:
         recurse: true
     {{- end }}
