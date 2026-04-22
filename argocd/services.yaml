@@ -36,7 +36,7 @@ spec:
           targetRevision: master
           helm:
             valuesObject:
-              serviceName: {{.values.serviceName}}
+              serviceName: "{{.values.serviceName}}"
             valueFiles:
               - $service/services/{{.values.serviceName}}/service.yaml
       syncPolicy:
