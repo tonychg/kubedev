@@ -7,3 +7,11 @@ helm:
   repoURL: https://helm.cilium.io
   targetRevision: 1.19.1
   chart: cilium
+syncPolicy:
+  automated:
+    enabled: true
+    prune: false
+    selfHeal: false
+  syncOptions:
+    - Validate=true
+    - CreateNamespace=true
