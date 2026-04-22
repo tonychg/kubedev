@@ -1,5 +1,5 @@
 serviceName: ""
-repoURL: git@github.com:tonychg/kubedev.git
+repoURL: https://github.com/tonychg/kubedev.git
 revision: master
 project: default
 destination: {}
