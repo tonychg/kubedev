@@ -1,4 +1,3 @@
-serviceName: cilium
 manifests: true
 destination:
   name: in-cluster
