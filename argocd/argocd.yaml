@@ -24,3 +24,12 @@ spec:
       directory:
         include: services.yaml
         recurse: false
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - Validate=true
+      - CreateNamespace=true
+      - ServerSideApply=true
