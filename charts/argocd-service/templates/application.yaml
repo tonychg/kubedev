@@ -7,6 +7,9 @@ metadata:
   {{- else }}
   {{- printf "serviceName must be defined" | fail }}
   {{- end }}
+  {{- with .Values.annotations }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
 spec:
   project: {{ .Values.project }}
   {{- with .Values.destination }}
