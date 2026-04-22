@@ -1,3 +1,5 @@
+crds:
+  enabled: true
 grafana:
   ingress:
     enabled: true
