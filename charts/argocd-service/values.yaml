@@ -1,4 +1,9 @@
 serviceName: ""
 repoURL: git@github.com:tonychg/kubedev.git
 revision: master
+destination:
+  name: in-cluster
 servicesPath: ./services
+manifests: false
+sources: []
+helm: {}
