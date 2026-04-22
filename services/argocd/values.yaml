@@ -1,0 +1,31 @@
+redis-ha:
+  enabled: true
+
+controller:
+  replicas: 1
+
+global:
+  domain: argocd.172.19.0.50.nip.io
+
+certificate:
+  enabled: true
+
+server:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+  ingress:
+    enabled: true
+    ingressClassName: haproxy
+    annotations:
+      haproxy.org/ssl-passthrough: "true"
+      haproxy.org/ssl-redirect: "false"
+    tls: true
+
+repoServer:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+
+applicationSet:
+  replicas: 2

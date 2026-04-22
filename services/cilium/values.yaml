@@ -1,0 +1,10 @@
+ipam:
+  pullPolicy: IfNotPresent
+  mode: kubernetes
+kubeProxyReplacement: true
+gatewayAPI:
+  enabled: false
+ingressController:
+  enabled: false
+l2announcements:
+  enabled: true
