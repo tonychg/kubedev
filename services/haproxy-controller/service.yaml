@@ -8,7 +8,7 @@ helm:
 syncPolicy:
   automated:
     enabled: true
-    prune: true
+    prune: false
     selfHeal: false
   syncOptions:
     - CreateNamespace=true
