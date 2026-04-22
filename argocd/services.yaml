@@ -43,7 +43,7 @@ spec:
         automated:
           enabled: true
           prune: true
-          selfHeal: false
+          selfHeal: true
         syncOptions:
           - Validate=true
           - CreateNamespace=true
