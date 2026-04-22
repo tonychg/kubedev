@@ -5,7 +5,6 @@ helm:
   repoURL: https://prometheus-community.github.io/helm-charts
   targetRevision: 83.7.0
   chart: kube-prometheus-stack
-  skipCrds: false
 syncPolicy:
   automated:
     enabled: true
