@@ -43,6 +43,7 @@ tasks:
           version: 1.19.1
           valuesFile: services/cilium/values.yaml
           releaseName: cilium
+      - cilium-cli status --wait
   install-cilium-lb:
     cmds:
       - kubectl apply -f services/cilium/manifests
