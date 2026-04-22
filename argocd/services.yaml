@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: argocd-services
+  namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -10,20 +11,32 @@ spec:
         repoURL: git@github.com:tonychg/kubedev.git
         revision: master
         directories:
-          - path: services
+          - path: services/*/service.yaml
         values:
-          serviceName: "{{.path.basename}}"
+          serviceName: '{{.path.basename}}'
+  syncPolicy:
+    # Create and Update but not Delete
+    applicationsSync: create-update
+    # Delete resources on deletion
+    preserveResourcesOnDeletion: false
   template:
     metadata:
       name: "{{.serviceName}}"
     spec:
       destination:
         name: in-cluster
+        namespace: argocd
       project: default
-      source:
-        repoURL: git@github.com:tonychg/kubedev.git
-        path: charts/argocd-service
-        targetRevision: master
-        helm:
-          valuesObject:
-            serviceName: "{{.serviceName}}"
+      sources:
+        - repoURL: git@github.com:tonychg/kubedev.git
+          targetRevision: master
+          path: "services/{{.serviceName}}"
+          ref: service
+        - repoURL: git@github.com:tonychg/kubedev.git
+          path: charts/argocd-service
+          targetRevision: master
+          helm:
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - values.yaml
+              - $service/service.yaml

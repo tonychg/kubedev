@@ -1,0 +1,9 @@
+serviceName: cilium
+manifests: true
+destination:
+  name: in-cluster
+  namespace: kube-system
+helm:
+  repoURL: https://helm.cilium.io
+  targetRevision: 1.19.1
+  chart: cilium

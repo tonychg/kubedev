@@ -1,0 +1,17 @@
+serviceName: cilium
+manifests: true
+destination:
+  name: in-cluster
+  namespace: ingress-haproxy
+helm:
+  repoURL: https://helm.cilium.io
+  targetRevision: 1.19.1
+  chart: cilium
+syncPolicy:
+  automated:
+    enabled: true
+    prune: true
+    selfHeal: false
+  syncOptions:
+    - CreateNamespace=true
+    - PruneLast=true
