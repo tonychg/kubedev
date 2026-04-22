@@ -1,0 +1,16 @@
+destination:
+  name: in-cluster
+  namespace: monitoring
+helm:
+  repoURL: https://prometheus-community.github.io/helm-charts
+  targetRevision: 83.7.0
+  chart: kube-prometheus-stack
+syncPolicy:
+  automated:
+    enabled: true
+    prune: false
+    selfHeal: false
+  syncOptions:
+    - CreateNamespace=true
+    - PruneLast=true
+    - ServerSideApply=true
