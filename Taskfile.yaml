@@ -1,0 +1,103 @@
+version: 3
+vars:
+  KIND_CLUSTER_NAME: kind-local
+  KIND_CONFIG: kind/default.yaml
+  KIND_NETWORK_NAME: kind
+  KIND_NETWORK_GATEWAY: 172.19.0.1
+  KIND_NETWORK_NETWORK: 172.19.0.0/16
+  KUBE_CONTEXT: kind-{{.KIND_CLUSTER_NAME}}
+  KUBE_STATUS_CMD: kubectl --context={{.KUBE_CONTEXT}} version
+tasks:
+  _helm-upgrade:
+    internal: true
+    requires:
+      vars:
+        - namespace
+        - repoUrl
+        - chart
+        - version
+        - valuesFile
+        - releaseName
+    preconditions:
+      - test -f {{.valuesFile}}
+    cmds:
+      - |
+        helm upgrade --install \
+          --kube-context {{.KUBE_CONTEXT}} \
+          --namespace {{.namespace}} --create-namespace \
+          --version {{.version}} \
+          --repo {{.repoUrl}} \
+          -f {{.valuesFile}} \
+          --force \
+          {{.releaseName}} \
+          {{.chart}}
+    status:
+      - helm status --namespace {{.namespace}} {{.releaseName}}
+  install-cilium:
+    cmds:
+      - task: _helm-upgrade
+        vars:
+          namespace: kube-system
+          repoUrl: https://helm.cilium.io/
+          chart: cilium
+          version: 1.19.1
+          valuesFile: services/cilium/values.yaml
+          releaseName: cilium
+  install-cilium-lb:
+    cmds:
+      - kubectl apply -f services/cilium/ciliuml2announcementpolicy.yaml
+      - kubectl apply -f services/cilium/ciliumloadbalancerippool.yaml
+  install-argocd:
+    cmds:
+      - task: _helm-upgrade
+        vars:
+          namespace: argocd
+          repoUrl: https://argoproj.github.io/argo-helm
+          chart: argo-cd
+          version: 9.5.3
+          valuesFile: argocd/bootstrap.yaml
+          releaseName: argocd
+  create-docker-network:
+    cmds:
+      - |
+        docker network create \
+          --gateway {{.KIND_NETWORK_GATEWAY}} \
+          --subnet {{.KIND_NETWORK_NETWORK}} \
+          {{.KIND_NETWORK_NAME}}
+    status:
+      - docker inspect {{.KIND_NETWORK_NAME}}
+  create-kind-cluster:
+    deps:
+      - create-docker-network
+    cmds:
+      - kind create cluster --name={{.KIND_CLUSTER_NAME}} --config={{.KIND_CONFIG}}
+    status:
+      - "{{.KUBE_STATUS_CMD}}"
+  create:
+    deps:
+      - create-kind-cluster
+  delete:
+    preconditions:
+      - "{{.KUBE_STATUS_CMD}}"
+    cmds:
+      - kind delete cluster --name={{.KIND_CLUSTER_NAME}}
+      - docker network rm {{.KIND_NETWORK_NAME}}
+  bootstrap:
+    cmds:
+      - task: install-cilium
+  install-controllers:
+    deps:
+      - bootstrap
+    cmds:
+      - task: install-cilium-lb
+      - task: install-argocd
+  install:
+    deps:
+      - install-controllers
+  status:
+    cmds:
+      - kubectl version
+  default:
+    cmds:
+      - task: create
+      - task: install

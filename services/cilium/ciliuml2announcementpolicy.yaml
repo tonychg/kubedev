@@ -1,0 +1,22 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2-announcement-policy
+spec:
+  serviceSelector: {}
+  # On a multi-node cluster, you may not want the control-plane nodes
+  # making arp announcements. Uncomment the nodeSelector stanza here
+  # to disable that.
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  externalIPs: true
+  loadBalancerIPs: true
+  interfaces:
+    - ^eth+
+    - ^enp+
+    - ^ens+
+    - ^wlan+
+    - ^vmbr+
+    - ^wlp+

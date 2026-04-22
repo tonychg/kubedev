@@ -1,0 +1,4 @@
+serviceName: ""
+repoURL: git@github.com:tonychg/kubedev.git
+revision: master
+servicesPath: ./services

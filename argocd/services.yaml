@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-services
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: git@github.com:tonychg/kubedev.git
+        revision: master
+        directories:
+          - path: services
+        values:
+          serviceName: "{{.path.basename}}"
+  template:
+    metadata:
+      name: "{{.serviceName}}"
+    spec:
+      destination:
+        name: in-cluster
+      project: default
+      source:
+        repoURL: git@github.com:tonychg/kubedev.git
+        path: charts/argocd-service
+        targetRevision: master
+        helm:
+          valuesObject:
+            serviceName: "{{.serviceName}}"
