@@ -1,0 +1,14 @@
+monitoring:
+  podMonitorEnabled: true
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+    ephemeral-storage: 100Mi
+  limits:
+    cpu: 1000m
+    memory: 4Gi
+    ephemeral-storage: 1Gi
+image:
+  repository: ghcr.io/cloudnative-pg/cloudnative-pg
+  tag: "1.28.0"
