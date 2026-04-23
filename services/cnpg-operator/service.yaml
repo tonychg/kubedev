@@ -3,7 +3,7 @@ destination:
   namespace: cnpg-system
 helm:
   repoURL: https://cloudnative-pg.github.io/charts
-  targetVersion: 0.27.0
+  targetRevision: 0.27.0
   chart: cloudnative-pg
 syncPolicy:
   automated:
