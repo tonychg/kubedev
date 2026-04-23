@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-cluster
+spec:
+  instances: 2
+  storage:
+    size: 1Gi
+  managed:
+    roles:
+    - name: migration
+      ensure: present
+      login: true
+      inherit: true
+      comment: "Role used for migration"
+      passwordSecret:
+        name: migration
+  bootstrap:
+    initdb:
+      postInitApplicationSQL:
+      - GRANT SELECT ON cars TO migration;
