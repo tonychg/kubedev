@@ -1,0 +1,16 @@
+destination:
+  name: in-cluster
+  namespace: infisical
+manifests: true
+helm:
+  repoURL: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
+  targetRevision: 0.4.2
+  chart: infisical
+syncPolicy:
+  automated:
+    enabled: true
+    prune: false
+    selfHeal: false
+  syncOptions:
+    - CreateNamespace=true
+    - PruneLast=true

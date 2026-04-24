@@ -1,0 +1,13 @@
+infisical:
+  image:
+    repository: infisical/infisical
+    tag: "v0.159.20"
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+
+ingress:
+  enabled: true
+  hostName: http://infisical.172.19.0.50.nip.io
+  ingressClassName: haproxy
+  nginx:
+    enabled: false
