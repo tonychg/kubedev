@@ -8,6 +8,8 @@ redis:
   image:
     registry: mirror.gcr.io
     repository: bitnamilegacy/redis
+postgresql:
+  enabled: false
 ingress:
   enabled: true
   nginx:
