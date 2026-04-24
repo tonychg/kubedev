@@ -4,8 +4,8 @@ destination:
 manifests: true
 helm:
   repoURL: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
-  targetRevision: 0.4.2
-  chart: infisical
+  targetRevision: 1.8.0
+  chart: infisical-standalone
 syncPolicy:
   automated:
     enabled: true
