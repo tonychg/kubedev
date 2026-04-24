@@ -15,9 +15,15 @@ syncPolicy:
     - PruneLast=true
     - ServerSideApply=true
 ignoreDifferences:
-  - group: v1
+  - group: '*'
     kind: Secret
     name: monitoring-grafana
     namespace: monitoring
     jsonPointers:
       - /data/admin-password
+  - group: apps
+    kind: Deployment
+    name: monitoring-grafana
+    namespace: monitoring
+    jsonPointers:
+      - /spec/template/metadata/annotations/checksum~1secret

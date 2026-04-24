@@ -15,15 +15,18 @@ syncPolicy:
     - Validate=true
     - CreateNamespace=true
 ignoreDifferences:
-  - group: v1
+  - group: '*'
     kind: Secret
     name: cilium-ca
     namespace: kube-system
     jsonPointers:
-      - /data
-  - group: v1
+      - /data/ca.crt
+      - /data/ca.key
+  - group: '*'
     kind: Secret
     name: hubble-server-certs
     namespace: kube-system
     jsonPointers:
-      - /data
+      - /data/ca.crt
+      - /data/tls.crt
+      - /data/tls.key
