@@ -7,19 +7,23 @@ metadata:
   {{- else }}
   {{- printf "serviceName must be defined" | fail }}
   {{- end }}
+
   {{- with .Values.annotations }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 spec:
   project: {{ .Values.project }}
+
   {{- with .Values.destination }}
   destination:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
   sources:
     - repoURL: {{ .Values.repoURL }}
       targetRevision: {{ .Values.revision }}
       ref: app
+
     {{- if .Values.helm }}
     - {{ if .Values.helm.repoURL -}}
       repoURL: {{ .Values.helm.repoURL }}
@@ -43,6 +47,7 @@ spec:
         valueFiles:
           - $app/{{$servicePath}}/values.yaml
     {{- end }}
+
     {{- if .Values.manifests }}
     - repoURL: {{.Values.repoURL}}
       targetRevision: {{ .Values.revision }}
@@ -50,10 +55,14 @@ spec:
       directory:
         recurse: true
     {{- end }}
+
     {{- with .Values.sources }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+
   {{- with .Values.syncPolicy }}
   syncPolicy:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
+  ignoreDifferences: {{- toYaml .Values.ignoreDifferences | nindent 4 }}

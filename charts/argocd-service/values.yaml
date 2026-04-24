@@ -14,3 +14,4 @@ helm: {}
 # releaseName: ""
 # skipCrds: false
 syncPolicy: {}
+ignoreDifferences: []

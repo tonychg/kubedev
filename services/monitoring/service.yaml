@@ -14,3 +14,10 @@ syncPolicy:
     - CreateNamespace=true
     - PruneLast=true
     - ServerSideApply=true
+ignoreDifferences:
+  - group: v1
+    kind: Secret
+    name: monitoring-grafana
+    namespace: monitoring
+    jsonPointers:
+      - /data/admin-password
