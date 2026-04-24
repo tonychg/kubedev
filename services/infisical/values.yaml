@@ -4,10 +4,19 @@ infisical:
     tag: "v0.159.20"
     pullPolicy: IfNotPresent
   replicaCount: 2
-
+redis:
+  image:
+    registry: mirror.gcr.io
+    repository: bitnamilegacy/redis
 ingress:
   enabled: true
-  hostName: http://infisical.172.19.0.50.nip.io
-  ingressClassName: haproxy
   nginx:
     enabled: false
+  hostName: infisical.172.19.0.50.nip.io
+  ingressClassName: haproxy
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned
+  tls:
+    - secretName: infisical-tls
+      hosts:
+        - infisical.172.19.0.50.nip.io
