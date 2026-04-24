@@ -19,5 +19,6 @@ spec:
       targetRevision: {{ .Values.argocd.targetRevision }}
       helm:
         skipCrds: false
+        releaseName: argocd
         valueFiles:
           - $app/services/argocd/values.yaml
