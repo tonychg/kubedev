@@ -96,7 +96,7 @@ tasks:
       - install-controllers
     cmds:
       - |
-        helm upgrade argocd-configuration argocd \
+        helm upgrade argocd-configuration ./charts/argocd-configuration \
           --install --namespace argocd --create-namespace \
           --set targetRevision=$(git rev-parse --abbrev-ref HEAD)
   status:
