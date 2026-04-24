@@ -55,7 +55,7 @@ tasks:
           repoUrl: https://argoproj.github.io/argo-helm
           chart: argo-cd
           version: 9.5.3
-          valuesFile: argocd/bootstrap.yaml
+          valuesFile: services/argocd/values-bootstrap.yaml
           releaseName: argocd
   create-docker-network:
     cmds:
@@ -95,7 +95,10 @@ tasks:
     deps:
       - install-controllers
     cmds:
-      - kubectl apply -f argocd/argocd.yaml
+      - |
+        helm upgrade argocd-configuration argocd \
+          --install --namespace argocd --create-namespace \
+          --set targetRevision=$(git rev-parse --abbrev-ref HEAD)
   status:
     cmds:
       - kubectl version

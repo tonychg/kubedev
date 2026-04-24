@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  project: {{ .Values.project }}
+
+  destination: {{- toYaml .Values.destination | nindent 4 }}
+  syncPolicy: {{- toYaml .Values.argocd.syncPolicy | nindent 4 }}
+
+  sources:
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: {{ .Values.targetRevision }}
+      ref: app
+
+    - repoURL: {{ .Values.argocd.repoURL }}
+      chart: argo-cd
+      targetRevision: {{ .Values.argocd.targetRevision }}
+      helm:
+        skipCrds: false
+        valueFiles:
+          - $app/services/argocd/values.yaml

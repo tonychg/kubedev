@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-services
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: {{ .Values.repoURL }}
+        revision: {{ .Values.targetRevision }}
+        requeueAfterSeconds: {{ .Values.services.requeueAfterSeconds }}
+        files:
+          - path: "services/*/service.yaml"
+        values:
+          serviceName: '{{ `{{ .path.basenameNormalized }}` }}'
+  syncPolicy:
+    # Create and Update but not Delete
+    applicationsSync: create-update
+    # Delete resources on deletion
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      name: "service-{{ `{{ .values.serviceName }}` }}"
+    spec:
+      destination: {{- toYaml .Values.destination | nindent 8 }}
+      project: {{ .Values.project }}
+      sources:
+        - repoURL: {{ .Values.repoURL }}
+          targetRevision: {{ .Values.targetRevision }}
+          ref: service
+
+        - repoURL: {{ .Values.repoURL }}
+          targetRevision: {{ .Values.targetRevision }}
+          path: charts/argocd-service
+          helm:
+            valuesObject:
+              serviceName: "{{ `{{ .values.serviceName }}` }}"
+              repoURL: {{ .Values.repoURL }}
+              revision: {{ .Values.targetRevision }}
+            valueFiles:
+              - $service/services/{{ `{{ .values.serviceName }}` }}/service.yaml
+
+      syncPolicy:
+        automated:
+          enabled: true
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - Validate=true
+          - CreateNamespace=true
