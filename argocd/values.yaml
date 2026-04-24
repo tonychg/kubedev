@@ -1,0 +1,24 @@
+project: default
+repoURL: https://github.com/tonychg/kubedev.git
+targetRevision: master
+
+destination:
+  name: in-cluster
+  namespace: argocd
+
+argocd:
+  repoURL: https://argoproj.github.io/argo-helm
+  targetRevision: 9.5.3
+
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - Validate=true
+      - CreateNamespace=true
+      - ServerSideApply=true
+
+services:
+  requeueAfterSeconds: 15

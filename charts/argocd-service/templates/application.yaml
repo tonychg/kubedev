@@ -18,6 +18,7 @@ spec:
   {{- end }}
   sources:
     - repoURL: {{ .Values.repoURL }}
+      targetRevision: {{ .Values.revision }}
       ref: app
     {{- if .Values.helm }}
     - {{ if .Values.helm.repoURL -}}
@@ -44,6 +45,7 @@ spec:
     {{- end }}
     {{- if .Values.manifests }}
     - repoURL: {{.Values.repoURL}}
+      targetRevision: {{ .Values.revision }}
       path: {{$servicePath}}/manifests
       directory:
         recurse: true
