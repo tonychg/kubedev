@@ -1,0 +1,33 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: example-preference-user-override
+spec:
+  preference:
+    kind: VirtualMachinePreference
+    name: example-preference
+  runStrategy: Halted
+  template:
+    spec:
+      domain:
+        memory:
+          guest: 128Mi
+        devices:
+          disks:
+          - disk:
+              bus: sata
+            name: containerdisk
+          - disk: {}
+            name: cloudinitdisk
+        resources: {}
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - containerDisk:
+          image: registry:5000/kubevirt/cirros-container-disk-demo:devel
+        name: containerdisk
+      - cloudInitNoCloud:
+          userData: |
+            #!/bin/sh
+
+            echo 'printed from cloud-init userdata'
+        name: cloudinitdisk

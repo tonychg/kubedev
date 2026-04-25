@@ -1,0 +1,12 @@
+destination:
+  name: in-cluster
+  namespace: kubevirt
+manifests: true
+syncPolicy:
+  automated:
+    enabled: true
+    prune: false
+    selfHeal: false
+  syncOptions:
+    - CreateNamespace=false
+    - PruneLast=true
