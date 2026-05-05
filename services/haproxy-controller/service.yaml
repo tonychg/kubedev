@@ -2,7 +2,7 @@ destination:
   namespace: haproxy-controller
 helm:
   repoURL: https://haproxytech.github.io/helm-charts
-  targetRevision: 1.44.0
+  targetRevision: {{ haproxy.revision }}
   chart: kubernetes-ingress
 syncPolicy:
   automated:
