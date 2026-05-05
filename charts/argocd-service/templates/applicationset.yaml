@@ -1,6 +1,6 @@
 {{ $servicePath := printf "%s/%s" .Values.servicesPath .Values.serviceName }}
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
   {{- if .Values.serviceName }}
   name: {{ .Values.serviceName }}
@@ -12,57 +12,85 @@ metadata:
   {{- toYaml . | nindent 2 }}
   {{- end }}
 spec:
-  project: {{ .Values.project }}
-
-  {{- with .Values.destination }}
-  destination:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-
-  sources:
-    - repoURL: {{ .Values.repoURL }}
-      targetRevision: {{ .Values.revision }}
-      ref: app
-
-    {{- if .Values.helm }}
-    - {{ if .Values.helm.repoURL -}}
-      repoURL: {{ .Values.helm.repoURL }}
-      {{- else }}
-      {{- printf "helm.repoURL must be defined" | fail }}
-      {{- end }}
-      {{- if .Values.helm.chart }}
-      chart: {{ .Values.helm.chart }}
-      {{- else }}
-      {{- printf "helm.chart must be defined" | fail }}
-      {{- end }}
-      {{- if .Values.helm.targetRevision }}
-      targetRevision: {{ .Values.helm.targetRevision }}
-      {{- else }}
-      {{- printf "helm.targetRevision must be defined" | fail }}
-      {{- end }}
-      helm:
-        releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
-        ignoreMissingValueFiles: true
-        skipCrds: {{ .Values.helm.skipCrds | default false }}
-        valueFiles:
-          - $app/{{$servicePath}}/values.yaml
-    {{- end }}
-
-    {{- if .Values.manifests }}
-    - repoURL: {{.Values.repoURL}}
-      targetRevision: {{ .Values.revision }}
-      path: {{$servicePath}}/manifests
-      directory:
-        recurse: true
-    {{- end }}
-
-    {{- with .Values.sources }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-
-  {{- with .Values.syncPolicy }}
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    # We use matrix generators to assign app to clusters
+    # Cluster are filtered by environment
+    - matrix:
+       generators:
+        - git:
+            repoURL: {{ .Values.repoURL }}
+            revision: {{ .Values.revision }}
+            requeueAfterSeconds: {{ .Values.requeueAfterSeconds }}
+            files:
+              - path: "services/{{ .Values.serviceName }}/envs/*/app.yaml"
+            values:
+              environment: "{{ `{{ index .path.segments 3 }}` }}"
+        - clusters:
+            selector:
+              matchLabels:
+                environment: "{{ `{{ .values.environment }}` }}"
   syncPolicy:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    # Create and Update but not Delete
+    applicationsSync: create-update
+    # Delete resources on deletion
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      name: "{{ `{{ .values.environment }}` }}-{{ .Values.serviceName }}"
+    spec:
+      project: {{ .Values.project }}
 
-  ignoreDifferences: {{- toYaml .Values.ignoreDifferences | nindent 4 }}
+      destination:
+        name: "{{ `{{ .name }}` }}"
+        namespace: {{ .Values.destination.namespace }}
+
+      sources:
+        - repoURL: {{ .Values.repoURL }}
+          targetRevision: {{ .Values.revision }}
+          ref: app
+
+        {{- if .Values.helm }}
+        - {{ if .Values.helm.repoURL -}}
+          repoURL: {{ .Values.helm.repoURL }}
+          {{- else }}
+          {{- printf "helm.repoURL must be defined" | fail }}
+          {{- end }}
+          {{- if .Values.helm.chart }}
+          chart: {{ .Values.helm.chart }}
+          {{- else }}
+          {{- printf "helm.chart must be defined" | fail }}
+          {{- end }}
+          {{- if .Values.helm.targetRevision }}
+          targetRevision: {{ .Values.helm.targetRevision }}
+          {{- else }}
+          {{- printf "helm.targetRevision must be defined" | fail }}
+          {{- end }}
+          helm:
+            releaseName: {{ .Values.helm.releaseName | default .Values.serviceName }}
+            ignoreMissingValueFiles: true
+            skipCrds: {{ .Values.helm.skipCrds | default false }}
+            valueFiles:
+              - $app/{{$servicePath}}/values.yaml
+              - $app/{{$servicePath}}/envs/{{ `{{ .values.environment }}` }}/values.yaml
+        {{- end }}
+
+        {{- if .Values.manifests }}
+        - repoURL: {{.Values.repoURL}}
+          targetRevision: {{ .Values.revision }}
+          path: "{{$servicePath}}/envs/{{ `{{ .values.environment }}` }}/manifests"
+          directory:
+            recurse: true
+        {{- end }}
+
+        {{- with .Values.sources }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+      {{- with .Values.syncPolicy }}
+      syncPolicy:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      ignoreDifferences: {{- toYaml .Values.ignoreDifferences | nindent 8 }}

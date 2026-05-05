@@ -1,7 +1,5 @@
 destination:
-  name: in-cluster
   namespace: kubevirt
-manifests: true
 syncPolicy:
   automated:
     enabled: true

@@ -1,5 +1,4 @@
 destination:
-  name: in-cluster
   namespace: haproxy-controller
 helm:
   repoURL: https://haproxytech.github.io/helm-charts
