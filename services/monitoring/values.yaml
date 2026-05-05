@@ -1,14 +1,2 @@
 crds:
   enabled: true
-grafana:
-  ingress:
-    enabled: true
-    ingressClassName: haproxy
-    annotations:
-      cert-manager.io/cluster-issuer: selfsigned
-    hosts:
-      - grafana.172.19.0.50.nip.io
-    tls:
-      - secretName: grafana-tls
-        hosts:
-          - grafana.172.19.0.50.nip.io

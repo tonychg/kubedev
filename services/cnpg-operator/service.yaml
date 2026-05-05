@@ -1,5 +1,4 @@
 destination:
-  name: in-cluster
   namespace: cnpg-system
 helm:
   repoURL: https://cloudnative-pg.github.io/charts

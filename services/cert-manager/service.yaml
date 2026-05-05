@@ -1,7 +1,5 @@
 destination:
-  name: in-cluster
   namespace: cert-manager
-manifests: true
 helm:
   repoURL: oci://quay.io/jetstack/charts/cert-manager
   targetRevision: v1.20.2

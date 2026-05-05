@@ -1,7 +1,5 @@
 destination:
-  name: in-cluster
   namespace: infisical
-manifests: true
 helm:
   repoURL: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
   targetRevision: 1.8.0

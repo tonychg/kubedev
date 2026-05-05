@@ -46,7 +46,7 @@ tasks:
       - cilium status --wait
   install-cilium-lb:
     cmds:
-      - kubectl apply -f services/cilium/manifests
+      - kubectl apply -f services/cilium/envs/local/manifests
   install-argocd:
     cmds:
       - task: _helm-upgrade
@@ -97,6 +97,7 @@ tasks:
     cmds:
       - |
         helm upgrade argocd-configuration ./charts/argocd-configuration \
+          --kube-context {{.KUBE_CONTEXT}} \
           --install --namespace argocd --create-namespace \
           --set targetRevision=$(git rev-parse --abbrev-ref HEAD)
   status:

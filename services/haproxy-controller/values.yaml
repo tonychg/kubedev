@@ -2,8 +2,5 @@ controller:
   replicaCount: 3
   ingressClassResource:
     enabled: true
-  service:
-    type: LoadBalancer
-    loadBalancerIP: "172.19.0.50"
   config:
     syslog-server: 'address:stdout, format: raw, facility:daemon'
