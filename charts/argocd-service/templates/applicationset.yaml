@@ -76,13 +76,13 @@ spec:
               - $app/{{$servicePath}}/envs/{{ `{{ .values.environment }}` }}/values.yaml
         {{- end }}
 
-        {{- if .Values.manifests }}
         - repoURL: {{.Values.repoURL}}
           targetRevision: {{ .Values.revision }}
-          path: "{{$servicePath}}/envs/{{ `{{ .values.environment }}` }}/manifests"
+          path: "{{$servicePath}}/envs/{{ `{{ .values.environment }}` }}"
           directory:
             recurse: true
-        {{- end }}
+            exclude: "app.yaml,values.yaml"
+            include: "*.yaml"
 
         {{- with .Values.sources }}
         {{- toYaml . | nindent 8 }}

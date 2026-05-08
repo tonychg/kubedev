@@ -4,7 +4,6 @@ revision: master
 project: default
 destination: {}
 servicesPath: services
-manifests: false
 annotations: {}
 sources: []
 helm: {}
