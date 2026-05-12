@@ -46,7 +46,7 @@ tasks:
       - cilium status --wait
   install-cilium-lb:
     cmds:
-      - kubectl apply -f services/cilium/envs/local/manifests
+      - kubectl --context={{.KUBE_CONTEXT}} apply -f services/cilium/envs/local/manifests
   install-argocd:
     cmds:
       - task: _helm-upgrade
