@@ -20,9 +20,7 @@
           kube-capacity
           argocd
           k9s
-          gnumake
           cilium-cli
-          traceroute
           go-task
           argocd
         ];
